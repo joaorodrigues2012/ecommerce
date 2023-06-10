@@ -85,8 +85,6 @@ class User extends Model{
 
   public static function logout(){
     $_SESSION[User::SESSION] = NULL;
-    header("Location: /admin/login");
-      exit;
   }
 
   public static function listAll(){

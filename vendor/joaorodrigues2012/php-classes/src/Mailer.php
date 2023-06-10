@@ -6,8 +6,8 @@ use Rain\Tpl;
 use PHPMailer\PHPMailer;
 
 class Mailer {
-  const USERNAME = "tt855679@gmail.com";
-	const PASSWORD = "Brasil@2023";
+  const USERNAME = "cursophp7hcode@gmail.com";
+	const PASSWORD = "<?password?>";
 	const NAME_FROM = "Hcode Store";
 
 	private $mail;
@@ -40,7 +40,7 @@ class Mailer {
 		// 0 = off (for production use)
 		// 1 = client messages
 		// 2 = client and server messages
-		$this->mail->SMTPDebug = 2;
+		$this->mail->SMTPDebug = 0;
 
 		//Ask for HTML-friendly debug output
 		$this->mail->Debugoutput = 'html';
@@ -93,18 +93,7 @@ class Mailer {
 	public function send()
 	{
 
-		$email = $this->mail->send();
-
-		if (!$email) {
-			echo "Mailer Error: " . $this->mail->ErrorInfo;
-	} else {
-			echo "Message sent!";
-	}
-
-	exit;
-
-		//return $this->mail->send();
-		return $email;
+		return $this->mail->send();
 
 	}
   
