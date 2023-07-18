@@ -351,7 +351,7 @@ class User extends Model{
     WHERE b.desperson LIKE :search OR b.desemail like :search OR a.deslogin LIKE :search
     ORDER BY b.desperson
     LIMIT $start, $itemsPerPage", array(
-      'search' => $search
+      'search' => '%'.$search.'%'
     ));
 
     $reusltsTotal = $sql->select("SELECT FOUND_ROWS() as nrtotal;");
