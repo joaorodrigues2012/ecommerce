@@ -210,6 +210,7 @@ $app->post("/checkout", function(){
 
 	$_POST['deszipcode'] = $_POST['zipcode'];
 	$_POST['idperson'] = $user->getidperson();
+	$_POST['descomplement'] = $_POST['descomplement'] != "" ? $_POST['descomplement'] : NULL;
 	
 	$address->setData($_POST);
 
@@ -228,11 +229,70 @@ $app->post("/checkout", function(){
 		"idstatus" => OrderStatus::EM_ABERTO,
 		"vltotal" => $cart->getvltotal()
 	]);
-
+	
 	$order->save();
 
-	header("Location: /order/".$order->getidorder());
+	switch ((int)$_POST['payment-method']) {
+		case 1:
+			header("Location: /order/".$order->getidorder().'/pagseguro');
+			break;
+		
+		case 2:
+			header("Location: /order/".$order->getidorder().'/paypal');
+			break;
+	}
+
 	exit;
+
+});
+
+$app->get("/order/:idorder/pagseguro", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header' => false,
+		'footer' => false
+	]);
+
+	$page->setTpl('payment-pagseguro', array(
+		'order' => $order->getValues(),
+		'cart' => $cart->getValues(),
+		'products' => $cart->getProducts(),
+		'phone' => array(
+			'areaCode' => substr($order->getnrphone(), 0, 2),
+			'number' => substr($order->getnrphone(), 2, strlen($order->getnrphone()))
+		)
+	));
+
+});
+
+$app->get("/order/:idorder/paypal", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header' => false,
+		'footer' => false
+	]);
+
+	$page->setTpl('payment-paypal', array(
+		'order' => $order->getValues(),
+		'cart' => $cart->getValues(),
+		'products' => $cart->getProducts()
+	));
 
 });
 
