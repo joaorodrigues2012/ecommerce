@@ -227,10 +227,11 @@ class User extends Model{
 
   public function setPassword($password){
 
-    $sql = new $sql();
+    $sql = new Sql();
 
-    $sql->query("UPDATE tb_users set despassword = :password where iduser = :iduser",array(
-      ":iduser" => $this->getiduser()
+    $sql->query("UPDATE tb_users set despassword = :despassword WHERE iduser = :iduser",array(
+      ":iduser" => $this->getiduser(),
+      ":despassword" => $password
     ));
 
   }
